@@ -27,6 +27,7 @@
   },
   "homepage": "https://github.com/MRegirouard/DiscordGPTBot#readme",
   "dependencies": {
+    "@eta357/config-reader": "^2.2.0",
     "winston": "^3.5.0",
     "winston-daily-rotate-file": "^4.6.0"
   }
