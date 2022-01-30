@@ -21,7 +21,8 @@ const configFile = "config.json"
 var config
 const configOptions = 
 {
-    'Discord API Token':''
+    'Discord API Token':'',
+    'Ignore Prefix':'!gpt'
 }
 
 log.verbose('Reading config file...')
@@ -52,4 +53,21 @@ configReader.readOptions(configFile, configOptions, false, true, true, 2).then((
 discordClient.on('ready', () =>
 {
     log.info('Discord bot is ready and online.')
+
+    log.debug('Listening for messageCreate events...')
+    discordClient.on('messageCreate', (message) =>
+    {
+        log.verbose('Message received. Content: \"' + message.content + '\", Author: \"' + message.author.tag + '\"')
+
+        if (message.author.id === discordClient.user.id)
+            log.verbose('Message was sent by this Discord bot. Ignoring.')
+        else if (message.content.startsWith(config['Ignore Prefix']))
+            log.verbose('Message starts with \"' + config['Ignore Prefix'] + '\" ignore prefix. Ignoring.')
+        else
+        {
+            log.silly('Sending startTyping event...')
+            message.channel.sendTyping()
+            log.debug('Sent startTyping event.')
+        }
+    })
 })
